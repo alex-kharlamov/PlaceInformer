@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script type="text/javascript" src="./lib/tau/mobile/js/tau.js"></script>
+	<script src="./js/main.js"></script>
+	
+	<meta name="viewport" content="width=device-width,user-scalable=no"/>
+	<link rel="stylesheet"  href="./lib/tau/mobile/theme/default/tau.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css"/>
+	<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+	<title>Tizen Web IDE - Template - Tizen - Tizen Web UI Framework - Master-Detail</title>
+	
+	<style>
+           .myHeader {
+                 color:#cc0000;
+           }
+ 
+           .myParagraph {
+                color:#333;
+		overflow:show;
+		text-overflow:clip;
+		white-space:normal;
+		height:28px;
+		margin-bottom:0px;
+           }
+        </style>
+	
+		
+	  <script>
+var watchId;
+
+function successCallback(position) {
+  document.getElementById("locationInfo").innerHTML = "Latitude: " +   
+  position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+}
+
+function errorCallback(error) {
+  var errorInfo = document.getElementById("locationInfo");
+
+  switch (error.code) {
+    case error.PERMISSION_DENIED:         
+      errorInfo.innerHTML = "User denied the request for Geolocation.";
+      break;
+    case error.POSITION_UNAVAILABLE:
+      errorInfo.innerHTML = "Location information is unavailable.";
+      break;
+    case error.TIMEOUT:
+      errorInfo.innerHTML = "The request to get user location timed out.";
+      break;
+    case error.UNKNOWN_ERROR:
+      errorInfo.innerHTML = "An unknown error occurred.";
+      break;
+   }
+}
+
+function oneShotFunc() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+  } else {
+    document.getElementById("locationInfo").innerHTML =
+           "Geolocation is not supported.";
+  }
+}
+
+function watchFunc() {
+  if (navigator.geolocation) {
+    watchId = navigator.geolocation.watchPosition(successCallback,
+          errorCallback);
+  } else {
+    document.getElementById("locationInfo").innerHTML =
+           "Geolocation is not supported.";
+  }
+}
+
+function stopWatchFunc() {
+  if (navigator.geolocation) {
+    navigator.geolocation.clearWatch(watchId);
+  } else {
+    document.getElementById("locationInfo").innerHTML =
+          "Geolocation is not supported.";
+  }
+}
+
+function get_pos() {
+ if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(loadData, errorCallback);
+  }
+}
+
+
+var data, i = 0, cur_img = 0, latest_img, img = 0;
+
+function left() {
+	if (i > 0) {
+		i = i - 1;
+	}
+	show();
+}
+
+function right() {
+	if (i < 100) {
+		i = i + 1;
+	}
+	show();
+}
+
+function show() {
+	var temp = JSON.parse(data[i]);
+    document.getElementById("hd").innerHTML = temp.name;
+    document.getElementById("Address").innerHTML = temp.address;
+    document.getElementById("Distance").innerHTML = temp.dist + " km";
+	img.src = temp.image;
+	
+		
+}
+function navigate(){
+	var temp = JSON.parse(data[i]);
+	var mylat = 55.8072;
+	var myloc = 37.5435;
+	var lat = temp.lat;
+	var lon = temp.lon;
+	
+	
+	
+	
+	var xhr = new XMLHttpRequest(); 
+	 var debug_url = "https://maps.googleapis.com/maps/api/directions/json?origin=55.8072,37.5435&destination=";// + lat + "," + lon + "&key=AIzaSyBqjQb2Hi6FwAcN0LfQoWh2cirXPihbEjI";
+	  
+	  var temp1 = debug_url.concat(lat);
+	  temp1 = temp1.concat(",");
+	  temp1 = temp1.concat(lon);
+	  temp1 = temp1.concat("&key=AIzaSyBqjQb2Hi6FwAcN0LfQoWh2cirXPihbEjI");
+	 
+	  xhr.open('GET', temp1, true);
+	  
+	  xhr.send();
+	xhr.onreadystatechange = function() {
+	    if (xhr.readyState != 4) {
+	
+	    	return;
+	    }
+	
+	    if (xhr.status != 200) {
+	      alert( xhr.status + ': ' + xhr.statusText );
+	    } else {
+	      try {
+	       datanew = JSON.parse(xhr.responseText);
+	       
+	       
+			
+			
+			var myRoute = datanew.routes[0];
+        var txtDir = '';
+        for (var i=0; i<2; i++) {
+          txtDir += myRoute.legs[0].steps[i].html_instructions+"<br />" + "\n";
+        }
+			
+			document.getElementById("Address").innerHTML = txtDir;
+	
+	      } catch (e) {
+	        alert( "Некорректный ответ " + e.message );
+	      }
+	      
+	      
+	    }
+	
+	  }
+  
+  }
+
+
+
+function loadData(position) {
+
+if (img == 0){
+	  var xhr = new XMLHttpRequest(); 
+	  
+	  var debug_url = "http://40.68.192.112:8000/data_request/55.8072/37.5435";
+	 
+	  xhr.open('GET', debug_url, true);
+	  
+	  xhr.send();
+	  
+	  xhr.onreadystatechange = function() {
+	    if (xhr.readyState != 4) {
+	
+	    	return;
+	    }
+	
+	    if (xhr.status != 200) {
+	      alert( xhr.status + ': ' + xhr.statusText );
+	    } else {
+	      try {
+	       data = JSON.parse(xhr.responseText);
+	       i = 0;
+	       
+	       var temp = JSON.parse(data[i]);
+	      document.getElementById("hd").innerHTML = temp.name;
+	       document.getElementById("centerbutton").innerHTML = "Nearest";
+	      img = new Image();
+	       img.style.width = '100%'
+			img.style.height = '30'
+			show();
+			document.getElementById("image-container").appendChild(img);
+			document.getElementById('leftb').style.visibility = 'visible';
+			document.getElementById('rightb').style.visibility = 'visible';
+			document.getElementById('navb').style.visibility = 'visible';
+	
+	      } catch (e) {
+	        alert( "Некорректный ответ " + e.message );
+	      }
+	      
+	      
+	    }
+	
+	  }
+  
+  } else {
+  	i = 0;
+  	show();
+  }
+}
+
+function navigateMAPS(){
+	tau.changePage("navigation.html");
+}
+
+
+  </script>
+	
+</head>
+
+<body>
+	<div class="ui-page" id="main">
+		
+
+		<div  class="ui-content">
+			<div >
+				<p align="center" ><span id="hd"> <b>Places informer</span></b></p>
+			
+			<div overflow:hidden>
+					
+					<div  id="image-container"></div>
+				
+				    <p><b>Detailed info: </b><br>
+				    <span id="Address">Click to download data from server.</span></p>
+				    <span id="Distance"></span></p>
+				     	 
+					
+					
+					<div class="ui-grid-col-3" style="height:30px">
+					   <button id="leftb" type="button" class="ui-btn" " onclick="left()">Left</button>
+					   <button id="centerbutton" type="button" class="ui-btn" onclick="loadData()">Load Data</button>
+					   <button id="rightb" type="button" class="ui-btn" onclick="right()">Right</button>
+					   <button id="navb" type="button"  class="ui-btn" onclick="navigateMAPS()">Navigate</button>
+      				<a data-role="button" href="navigation.html" target="_self">Change to external</a>
+					   
+					  
+					</div>
+					
+					<script>
+					document.getElementById('leftb').style.visibility = 'hidden';
+					document.getElementById('rightb').style.visibility = 'hidden';
+					document.getElementById('navb').style.visibility = 'hidden';
+					</script>
+					
+				   
+					
+					
+			</div>
+			</div>
+			
+			
+			
+			
+			
+		</div><!-- /content -->
+		
+				
+				    
+								
+	</div><!-- /page -->
+	
+
+</body>
+</html>

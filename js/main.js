@@ -1,21 +1,18 @@
-( function () {
-    window.addEventListener( 'tizenhwkey', function( ev ) {
-        if( ev.keyName === "back" ) {
-            var activePopup = document.querySelector( '.ui-popup-active' ),
-                page = document.getElementsByClassName( 'ui-page-active' )[0],
-                pageid = page ? page.id : "";
-
-            if( pageid === "main" && !activePopup ) {
-                try {
-                    tizen.application.getCurrentApplication().exit();
-                } catch (ignore) {
-                }
-            } else {
-                window.history.back();
-            }
+document.addEventListener('tizenhwkey', function(e) {
+    if(e.keyName == "back") {
+        try {
+        	//console.log(window.location.pathname);
+        	if (window.location.pathname.search('index.html') == -1){
+        		window.open("index.html","_self");
+        	} else {
+        		
+        		tizen.application.getCurrentApplication().exit();
+        	}
+        } catch (error) {	
+            console.error("getCurrentApplication(): " + error.message);
         }
-    } );
-} () );
+    }
+});
 
 
 
