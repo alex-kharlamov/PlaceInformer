@@ -166,8 +166,13 @@ if (data == 0){
 		       var value = $("#item").val();
 	
 		       //var listItem = "<li>" + value + "</li>";
-				var listItem = '<li data-icon="location" id = "' + i + '"><a target="_blank" href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
-				$("#data_list").append(listItem);
+		       if (temp.predict == 0){
+		    	   var listItem = '<li data-icon="location" id = "' + i + '"><a target="_blank" href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+		       } else {
+		    	   var listItem = '<li data-icon="check" id = "' + i + '"><a target="_blank" href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+
+		       }
+		       $("#data_list").append(listItem);
 	       }
 			$("#data_list").listview("refresh");
 
@@ -192,7 +197,12 @@ if (data == 0){
 	       var value = $("#item").val();
 
 	       //var listItem = "<li>" + value + "</li>";
-			var listItem = '<li data-icon="location" id = "' + i + '"><a target="_blank" href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+	       if (temp.predict == 0){
+	    	   var listItem = '<li data-icon="location" id = "' + i + '"><a target="_blank" href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+	       } else {
+	    	   var listItem = '<li data-icon="check" id = "' + i + '"><a target="_blank" href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+
+	       }
 			$("#data_list").append(listItem);
 			
       }
@@ -218,6 +228,7 @@ $(document).on("pagebeforecreate", "#home", function(e, ui) {
 
 
 
+
 	  
 	var temp;
 	  
@@ -230,6 +241,33 @@ $(document).on("pagebeforecreate", "#home", function(e, ui) {
 		}); 
 
 	  
+	  $(document).on("swipe", "#data_list li" ,function (event) {
+		  var id = $(this).attr("id"); // Get the ID
+		  temp = JSON.parse(data[id]);
+		  $.dynamic_popup({
+		      content: temp.desc,
+		      'data-transition': 'slideup',
+		      'data-theme': 'a',
+		      'data-position-to': '#Register'
+		  })
+		    
+		}); 
+	  
+	  
+	  $(document).on("taphold", "#data_list li" ,function (event) {
+		  var id = $(this).attr("id"); // Get the ID
+		     //temp = JSON.parse(data[id]);
+		  //alert(id);
+		    
+		}); 
+	  
+	  
+	  
+	  
+	  
+	 
+	  
+		 
 	  
 /* check scroll function */
 function checkScroll() {
@@ -261,8 +299,12 @@ function addMore(page) {
     
     for (var i = last; i < cont; i++) {
     	var temp = JSON.parse(data[i]);
-		items += '<li data-rel="back" data-icon="location" id = "' + i + '"><a href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
-			
+    	if (temp.predict == 0){
+    		items += '<li data-rel="back" data-icon="location" id = "' + i + '"><a href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+    	} else {
+    		items += '<li data-rel="back" data-icon="check" id = "' + i + '"><a href="navigation.html" target="_top"><div class="thumbContainer"> <img  src="' + temp.image + '"width="200" height="100"></div><h1 class="myHeader"> ' + temp.name +  ' </h1><p class="myParagraph">' + temp.address + '</p><span class="ui-li-count">' + temp.dist + ' km' + '</span></a></li>';
+
+    	}
     }
     
     current_displayed_events += 5;

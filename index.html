@@ -4,13 +4,17 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
  <meta charset="utf-8">
-  
+ 
+ 
+
+				
   
   <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
  
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="js/jquery.mobile.dynamic.popup.js"></script>
   
  <link rel="stylesheet" type="text/css" href="./css/style.css"/>
  <style>
@@ -56,22 +60,36 @@
 </script>
  
  
- </script>
+<script type="text/javascript">
+
+ 
+</script> 
+
+<style type="text/css">
+   body{ -webkit-touch-callout: none !important; }
+   body { -webkit-user-select: none !important; } 
+  </style>
 
 
 </head>
 
 <body>
+
+
+    
+
 <div data-role="page" id="home" class="type-home">
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
 
          <h1>Places Informer</h1>
 
     </div>
+    
+
 
                 <div id="item" data-role="content">
-           <ul id="data_list" data-role="listview" class="has-odd-thumb" data-autodividers="true" data-filter="true" data-filter-placeholder="Search places..." data-inset="true" data-theme="a" data-split-theme="a" data-count-theme="b" data-dividertheme="b">
-				<li data-role="list-divider">Overview</li>
+           <ul id="data_list" data-role="listview" data-icon="false" class="has-odd-thumb"  data-filter="true" data-filter-placeholder="Search places..." data-inset="true" data-theme="a" data-split-theme="a" data-count-theme="b" data-dividertheme="b">
+				<li style="text-align:center;" data-role="list-divider">Overview</li>
 						     
 		</ul>
 		
@@ -79,14 +97,20 @@
 		
         
     </div>
+    
+    
     <div class='footer' data-role="footer" data-position="fixed" data-tap-toggle="false">
-         <h1>Footer</h1>
+         
 
     </div>
 
 
  <script src="./js/main.js"></script>
  <script src="./js/app.js"></script>
+ 
+ 
+
+ 
 </body>
 
 </html>

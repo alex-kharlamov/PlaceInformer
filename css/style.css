@@ -27,6 +27,19 @@ body {
     font-size: 5em;
 }
 
+.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+}
+
 
  .myHeader {
              color:#cc0000;
@@ -69,3 +82,11 @@ white-space:normal;
 #data_list .ui-li {
     width : 90%;
 }
+
+
+.ui-li-count {
+	font-size: 10px;
+	padding: 0.03em 0.03em;
+}
+
+
